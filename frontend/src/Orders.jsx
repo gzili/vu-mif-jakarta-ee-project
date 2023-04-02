@@ -15,13 +15,10 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link, useLoaderData } from 'react-router-dom';
 import { api } from "./api.js";
 import { PageHeader, PageHeaderActions, PageHeaderText } from "./components/PageHeader.jsx";
+import { toCurrency } from "./utils.js";
 
 export function ordersLoader() {
     return api.get('orders').json();
-}
-
-function toCurrency(number) {
-    return new Intl.NumberFormat('lt-LT', { style: 'currency', currency: 'EUR' }).format(number);
 }
 
 function OrderRow(props) {

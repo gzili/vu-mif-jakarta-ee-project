@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { NewOrder } from "./NewOrder.jsx";
+import { Order, orderLoader } from "./Order.jsx";
 import { Root } from "./Root.jsx";
 import { Orders, ordersLoader } from "./Orders.jsx";
 
@@ -38,6 +39,8 @@ const router = createBrowserRouter([
             },
             {
                 path: 'orders/:id',
+                loader: orderLoader,
+                element: <Order />,
             },
         ],
     }
