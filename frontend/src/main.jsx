@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { NewOrder } from "./NewOrder.jsx";
 import { Root } from "./Root.jsx";
-import { Orders } from "./Orders.jsx";
+import { Orders, ordersLoader } from "./Orders.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -29,6 +29,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'orders',
+                loader: ordersLoader,
                 element: <Orders />
             },
             {
