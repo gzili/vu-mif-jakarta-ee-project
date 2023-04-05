@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { NewOrder } from "./NewOrder.jsx";
 import { Order, orderLoader } from "./Order.jsx";
+import { productLoader } from "./Product.jsx";
+import { editProductAction, ProductEdit } from "./ProductEdit.jsx";
 import { Products, productsLoader } from "./Products.jsx";
 import { Root } from "./Root.jsx";
 import { Orders, ordersLoader } from "./Orders.jsx";
@@ -29,7 +31,11 @@ const router = createBrowserRouter([
                 element: <Products />,
             },
             {
-                path: 'products/:id',
+                path: 'products/:id/edit',
+                loader: productLoader,
+                action: editProductAction,
+                element: <ProductEdit />,
+                shouldRevalidate: ({ currentUrl }) => !currentUrl.pathname.includes('edit'),
             },
             {
                 path: 'orders',
