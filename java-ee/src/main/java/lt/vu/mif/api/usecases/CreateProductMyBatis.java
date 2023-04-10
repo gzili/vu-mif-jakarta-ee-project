@@ -7,6 +7,7 @@ import lt.vu.mif.api.contracts.ProductCreateDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import lt.vu.mif.api.interceptors.Logged;
 import lt.vu.mif.api.persistence.mybatis.ProductMapper;
 
 @Alternative
@@ -15,6 +16,7 @@ public class CreateProductMyBatis implements CreateProduct {
     @Inject
     ProductMapper productMapper;
 
+    @Logged
     @Transactional
     public int handle(ProductCreateDto dto) {
         Product product = new Product();

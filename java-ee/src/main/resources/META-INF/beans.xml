@@ -5,4 +5,7 @@
     <alternatives>
         <class>lt.vu.mif.api.usecases.CreateProductMyBatis</class>
     </alternatives>
+    <interceptors>
+        <class>lt.vu.mif.api.interceptors.LoggingInterceptor</class>
+    </interceptors>
 </beans>
