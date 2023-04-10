@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lt.vu.mif.api.persistence.mybatis.ProductMapper">
+    <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="Product" useGeneratedKeys="true">
+        insert into PUBLIC.PRODUCT (NAME, PRICE, VERSION)
+        values (#{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{version,jdbcType=INTEGER})
+    </insert>
+</mapper>
