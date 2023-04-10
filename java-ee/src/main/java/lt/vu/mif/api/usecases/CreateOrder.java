@@ -3,9 +3,9 @@ package lt.vu.mif.api.usecases;
 import lt.vu.mif.api.entities.Order;
 import lt.vu.mif.api.entities.OrderItem;
 import lt.vu.mif.api.entities.Product;
-import lt.vu.mif.api.persistence.OrderItemsRepository;
-import lt.vu.mif.api.persistence.OrdersRepository;
-import lt.vu.mif.api.persistence.ProductsRepository;
+import lt.vu.mif.api.persistence.OrderItemsDao;
+import lt.vu.mif.api.persistence.OrdersDao;
+import lt.vu.mif.api.persistence.ProductsDao;
 import lt.vu.mif.api.contracts.OrderCreateDto;
 
 import jakarta.enterprise.context.RequestScoped;
@@ -19,13 +19,13 @@ import java.util.List;
 @RequestScoped
 public class CreateOrder {
     @Inject
-    private ProductsRepository productsRepository;
+    private ProductsDao productsDao;
 
     @Inject
-    private OrdersRepository ordersRepository;
+    private OrdersDao ordersDao;
 
     @Inject
-    private OrderItemsRepository orderItemsRepository;
+    private OrderItemsDao orderItemsDao;
 
     @Transactional
     public int createNewOrder(OrderCreateDto dto) {
@@ -34,7 +34,7 @@ public class CreateOrder {
 
         List<OrderItem> orderItems = new ArrayList<>();
         for (OrderCreateDto.OrderItemDto item : dto.getItems()) {
-            Product product = productsRepository.find(item.getProductId());
+            Product product = productsDao.find(item.getProductId());
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
@@ -51,8 +51,8 @@ public class CreateOrder {
         order.setDiscountTotal(orderItems.stream().map(OrderItem::getDiscount).reduce(BigDecimal.ZERO, BigDecimal::add));
         order.setTotal(order.getSubtotal().subtract(order.getDiscountTotal()));
 
-        ordersRepository.persist(order);
-        orderItems.forEach(orderItemsRepository::persist);
+        ordersDao.persist(order);
+        orderItems.forEach(orderItemsDao::persist);
 
         return order.getId();
     }

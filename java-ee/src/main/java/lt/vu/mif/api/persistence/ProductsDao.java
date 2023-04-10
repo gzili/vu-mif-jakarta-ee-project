@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 @ApplicationScoped
-public class ProductsRepository {
+public class ProductsDao {
     @Inject
     private EntityManager em;
 

@@ -7,7 +7,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 @ApplicationScoped
-public class OrderItemsRepository {
+public class OrderItemsDao {
     @Inject
     private EntityManager em;
 

@@ -1,7 +1,7 @@
 package lt.vu.mif.api.controllers;
 
 import lt.vu.mif.api.entities.Order;
-import lt.vu.mif.api.persistence.OrdersRepository;
+import lt.vu.mif.api.persistence.OrdersDao;
 import lt.vu.mif.api.contracts.OrderCreateDto;
 import lt.vu.mif.api.contracts.OrderListItemReadDto;
 import lt.vu.mif.api.contracts.OrderReadDto;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Path("/orders")
 public class OrdersController {
     @Inject
-    private OrdersRepository ordersRepository;
+    private OrdersDao ordersDao;
 
     @Inject
     private CreateOrder createOrder;
@@ -34,7 +34,7 @@ public class OrdersController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        List<OrderListItemReadDto> orders = ordersRepository
+        List<OrderListItemReadDto> orders = ordersDao
                 .findAll()
                 .stream()
                 .map(OrderListItemReadDto::fromOrder)
@@ -46,7 +46,7 @@ public class OrdersController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") final int id) {
-        Order order = ordersRepository.find(id);
+        Order order = ordersDao.find(id);
         OrderReadDto dto = OrderReadDto.fromOrder(order);
         return Response.ok(dto).build();
     }

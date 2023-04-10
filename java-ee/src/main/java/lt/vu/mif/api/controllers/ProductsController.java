@@ -2,8 +2,8 @@ package lt.vu.mif.api.controllers;
 
 import lt.vu.mif.api.entities.Category;
 import lt.vu.mif.api.entities.Product;
-import lt.vu.mif.api.persistence.CategoriesRepository;
-import lt.vu.mif.api.persistence.ProductsRepository;
+import lt.vu.mif.api.persistence.CategoriesDao;
+import lt.vu.mif.api.persistence.ProductsDao;
 import lt.vu.mif.api.contracts.*;
 import lt.vu.mif.api.usecases.CreateProduct;
 import lt.vu.mif.api.usecases.UpdateProduct;
@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 @Path("/products")
 public class ProductsController {
     @Inject
-    private ProductsRepository productsRepository;
+    private ProductsDao productsDao;
 
     @Inject
-    private CategoriesRepository categoriesRepository;
+    private CategoriesDao categoriesDao;
 
     @Inject
     private CreateProduct createProduct;
@@ -44,9 +44,9 @@ public class ProductsController {
     public Response getAll(@QueryParam("categoryId") final int categoryId) {
         List<Product> products;
         if (categoryId > 0) {
-            products = productsRepository.findByCategory(categoryId);
+            products = productsDao.findByCategory(categoryId);
         } else {
-            products = productsRepository.findAll();
+            products = productsDao.findAll();
         }
 
         List<ProductReadDto> result = products
@@ -61,7 +61,7 @@ public class ProductsController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") final int id) {
-        Product product = productsRepository.find(id);
+        Product product = productsDao.find(id);
         ProductReadDto dto = ProductReadDto.FromProduct(product);
         return Response.ok(dto).build();
     }
@@ -86,8 +86,8 @@ public class ProductsController {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response addCategory(@PathParam("id") final int id, ProductAddRemoveCategoryDto dto) {
-        Product product = productsRepository.find(id);
-        Category category = categoriesRepository.find(dto.getCategoryId());
+        Product product = productsDao.find(id);
+        Category category = categoriesDao.find(dto.getCategoryId());
         product.getCategories().add(category);
         return Response.ok(ProductReadDto.FromProduct(product)).build();
     }
@@ -97,7 +97,7 @@ public class ProductsController {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response removeCategory(@PathParam("id") final int id, ProductAddRemoveCategoryDto dto) {
-        Product product = productsRepository.find(id);
+        Product product = productsDao.find(id);
         Category category = product.getCategories().stream().filter(c -> c.getId() == dto.getCategoryId()).findFirst().get();
         product.getCategories().remove(category);
         return Response.ok(ProductReadDto.FromProduct(product)).build();

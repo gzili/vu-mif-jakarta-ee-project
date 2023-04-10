@@ -1,7 +1,7 @@
 package lt.vu.mif.api.usecases;
 
 import lt.vu.mif.api.entities.Product;
-import lt.vu.mif.api.persistence.ProductsRepository;
+import lt.vu.mif.api.persistence.ProductsDao;
 import lt.vu.mif.api.contracts.ProductUpdateDto;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,11 +11,11 @@ import jakarta.transaction.Transactional;
 @ApplicationScoped
 public class UpdateProduct {
     @Inject
-    private ProductsRepository productsRepository;
+    private ProductsDao productsDao;
 
     @Transactional
     public void handle(int productId, ProductUpdateDto dto) {
-        Product existingProduct = productsRepository.find(productId);
+        Product existingProduct = productsDao.find(productId);
 
         Product updatedProduct = new Product();
         updatedProduct.setId(productId);
@@ -24,14 +24,14 @@ public class UpdateProduct {
         updatedProduct.setCategories(existingProduct.getCategories());
         updatedProduct.setVersion(dto.getVersion());
 
-        productsRepository.update(updatedProduct);
+        productsDao.update(updatedProduct);
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void forceUpdate(int productId, ProductUpdateDto dto) {
-        Product product = productsRepository.find(productId);
+        Product product = productsDao.find(productId);
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
-        productsRepository.update(product);
+        productsDao.update(product);
     }
 }
