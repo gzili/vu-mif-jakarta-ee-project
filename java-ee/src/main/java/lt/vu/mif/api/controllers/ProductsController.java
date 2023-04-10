@@ -1,13 +1,5 @@
 package lt.vu.mif.api.controllers;
 
-import lt.vu.mif.api.entities.Category;
-import lt.vu.mif.api.entities.Product;
-import lt.vu.mif.api.persistence.CategoriesDao;
-import lt.vu.mif.api.persistence.ProductsDao;
-import lt.vu.mif.api.contracts.*;
-import lt.vu.mif.api.usecases.CreateProduct;
-import lt.vu.mif.api.usecases.UpdateProduct;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
@@ -15,23 +7,34 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import lt.vu.mif.api.contracts.ProductAddRemoveCategoryDto;
+import lt.vu.mif.api.contracts.ProductCreateDto;
+import lt.vu.mif.api.contracts.ProductReadDto;
+import lt.vu.mif.api.contracts.ProductUpdateDto;
+import lt.vu.mif.api.usecases.*;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 @Path("/products")
 public class ProductsController {
     @Inject
-    private ProductsDao productsDao;
-
-    @Inject
-    private CategoriesDao categoriesDao;
-
-    @Inject
     private CreateProduct createProduct;
 
     @Inject
     private UpdateProduct updateProduct;
+
+    @Inject
+    private GetAllProducts getAllProducts;
+
+    @Inject
+    private GetProductById getProductById;
+
+    @Inject
+    private AddCategoryToProduct addCategoryToProduct;
+
+    @Inject
+    private RemoveCategoryFromProduct removeCategoryFromProduct;
 
     @POST
     public Response create(ProductCreateDto dto) {
@@ -42,28 +45,16 @@ public class ProductsController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll(@QueryParam("categoryId") final int categoryId) {
-        List<Product> products;
-        if (categoryId > 0) {
-            products = productsDao.findByCategory(categoryId);
-        } else {
-            products = productsDao.findAll();
-        }
-
-        List<ProductReadDto> result = products
-                .stream()
-                .map(ProductReadDto::FromProduct)
-                .collect(Collectors.toList());
-
-        return Response.ok(result).build();
+        List<ProductReadDto> products = getAllProducts.handle(categoryId);
+        return Response.ok(products).build();
     }
 
     @Path("{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") final int id) {
-        Product product = productsDao.find(id);
-        ProductReadDto dto = ProductReadDto.FromProduct(product);
-        return Response.ok(dto).build();
+        ProductReadDto product = getProductById.handle(id);
+        return Response.ok(product).build();
     }
 
     @Path("{id}")
@@ -86,10 +77,8 @@ public class ProductsController {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response addCategory(@PathParam("id") final int id, ProductAddRemoveCategoryDto dto) {
-        Product product = productsDao.find(id);
-        Category category = categoriesDao.find(dto.getCategoryId());
-        product.getCategories().add(category);
-        return Response.ok(ProductReadDto.FromProduct(product)).build();
+        ProductReadDto updatedProduct = addCategoryToProduct.handle(id, dto);
+        return Response.ok(updatedProduct).build();
     }
 
     @Path("{id}/categories")
@@ -97,9 +86,7 @@ public class ProductsController {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response removeCategory(@PathParam("id") final int id, ProductAddRemoveCategoryDto dto) {
-        Product product = productsDao.find(id);
-        Category category = product.getCategories().stream().filter(c -> c.getId() == dto.getCategoryId()).findFirst().get();
-        product.getCategories().remove(category);
-        return Response.ok(ProductReadDto.FromProduct(product)).build();
+        ProductReadDto updatedProduct = removeCategoryFromProduct.handle(id, dto);
+        return Response.ok(updatedProduct).build();
     }
 }
