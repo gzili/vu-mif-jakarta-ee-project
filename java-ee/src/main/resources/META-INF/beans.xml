@@ -5,6 +5,9 @@
     <alternatives>
         <class>lt.vu.mif.api.usecases.CreateProductMyBatis</class>
     </alternatives>
+    <decorators>
+        <class>lt.vu.mif.api.decorators.AuditedAddCategoryToProduct</class>
+    </decorators>
     <interceptors>
         <class>lt.vu.mif.api.interceptors.LoggingInterceptor</class>
     </interceptors>

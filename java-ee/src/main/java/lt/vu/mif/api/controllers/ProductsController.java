@@ -31,7 +31,7 @@ public class ProductsController {
     private GetProductById getProductById;
 
     @Inject
-    private AddCategoryToProduct addCategoryToProduct;
+    private AddCategoryToProductImpl addCategoryToProduct;
 
     @Inject
     private RemoveCategoryFromProduct removeCategoryFromProduct;
