@@ -21,7 +21,7 @@ public class OrdersDao {
     }
 
     public Order find(int id) {
-        return em.createQuery("select distinct o from Order o join fetch o.items i join fetch i.product where o.id = :id", Order.class)
+        return em.createQuery("select o from Order o where o.id = :id", Order.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }
