@@ -11,6 +11,8 @@ import lt.vu.mif.api.contracts.OrderCreateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import lt.vu.mif.api.services.DiscountCalculator;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,6 +29,9 @@ public class CreateOrder {
     @Inject
     private OrderItemsDao orderItemsDao;
 
+    @Inject
+    private DiscountCalculator discountCalculator;
+
     @Transactional
     public int createNewOrder(OrderCreateDto dto) {
         Order order = new Order();
@@ -42,7 +47,8 @@ public class CreateOrder {
             orderItem.setPrice(product.getPrice());
             orderItem.setQuantity(item.getQuantity());
             orderItem.setSubtotal(product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-            orderItem.setTotal(product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+            discountCalculator.setOrderItemDiscount(orderItem);
+            orderItem.setTotal(orderItem.getSubtotal().subtract(orderItem.getDiscount()));
 
             orderItems.add(orderItem);
         }
