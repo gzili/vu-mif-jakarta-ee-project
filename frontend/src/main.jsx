@@ -10,6 +10,7 @@ import { editProductAction, ProductEdit } from "./ProductEdit.jsx";
 import { Products, productsLoader } from "./Products.jsx";
 import { Root } from "./Root.jsx";
 import { Orders, ordersLoader } from "./Orders.jsx";
+import { Updates } from "./Updates.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
                 path: 'orders/:id',
                 loader: orderLoader,
                 element: <Order />,
+            },
+            {
+                path: 'updates',
+                element: <Updates />,
             },
         ],
     }

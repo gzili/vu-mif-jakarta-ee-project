@@ -1,6 +1,7 @@
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import UpdateIcon from '@mui/icons-material/Update';
 import { NavLink as RouterNavLink, Outlet } from "react-router-dom";
 
 function ListItemLink(props) {
@@ -37,10 +38,15 @@ export function Root() {
                 variant="permanent"
                 anchor="left"
             >
-                <List>
-                    <ListItemLink to="products" icon={<WidgetsIcon />} text="Products" />
-                    <ListItemLink to="orders" icon={<ReceiptIcon />} text="Orders" />
-                </List>
+                <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%">
+                    <List>
+                        <ListItemLink to="products" icon={<WidgetsIcon />} text="Products" />
+                        <ListItemLink to="orders" icon={<ReceiptIcon />} text="Orders" />
+                    </List>
+                    <List>
+                        <ListItemLink to="updates" icon={<UpdateIcon />} text="Updates" />
+                    </List>
+                </Box>
             </Drawer>
             <Box
                 component="main"
