@@ -37,7 +37,7 @@ public class CheckForUpdates {
         return null;
     }
 
-    public void handle() {
+    public void initiateCheck() {
         if (!isChecking()) {
             checkForUpdatesTask = CompletableFuture.supplyAsync(() -> {
                 int count = updateChecker.getUpdateCount();

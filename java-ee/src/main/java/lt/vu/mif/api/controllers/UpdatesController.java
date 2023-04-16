@@ -21,7 +21,7 @@ public class UpdatesController {
 
     @POST
     public Response check() {
-        checkForUpdates.handle();
+        checkForUpdates.initiateCheck();
         return Response.accepted().build();
     }
 
