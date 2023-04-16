@@ -15,7 +15,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link, useLoaderData } from 'react-router-dom';
 import { api } from "./api.js";
 import { PageHeader, PageHeaderActions, PageHeaderText } from "./components/PageHeader.jsx";
-import { toCurrency } from "./utils.js";
+import { formatIsoDateString, toCurrency } from "./utils.js";
 
 export function ordersLoader() {
     return api.get('orders').json();
@@ -27,7 +27,7 @@ function OrderRow(props) {
     return (
         <TableRow>
             <TableCell>#{order.id}</TableCell>
-            <TableCell>{order.dateCreated}</TableCell>
+            <TableCell>{formatIsoDateString(order.dateCreated)}</TableCell>
             <TableCell align="right">{toCurrency(order.subtotal)}</TableCell>
             <TableCell align="right">{toCurrency(order.discountTotal)}</TableCell>
             <TableCell align="right">{toCurrency(order.total)}</TableCell>

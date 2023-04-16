@@ -3,6 +3,7 @@ import { grey } from '@mui/material/colors'
 import { useMutation, useQuery } from "react-query";
 import { api } from "./api.js";
 import { PageHeader, PageHeaderText } from "./components/PageHeader.jsx";
+import { formatIsoDateString } from "./utils.js";
 
 function getUpdateMessage(count) {
     switch (count) {
@@ -31,7 +32,7 @@ function UpdateStatus(props) {
         return (
             <Box>
                 <Box fontWeight="bold" fontSize="20px">{getUpdateMessage(data.updateCount)}</Box>
-                <Box color={grey[600]}>Last check: {data.lastCheckDate}</Box>
+                <Box color={grey[600]}>Last check: {formatIsoDateString(data.lastCheckDate)}</Box>
             </Box>
         );
     }

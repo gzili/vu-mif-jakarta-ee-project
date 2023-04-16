@@ -1,8 +1,9 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { grey } from '@mui/material/colors';
 import { useLoaderData } from "react-router-dom";
 import { api } from "./api.js";
 import { PageHeader, PageHeaderText } from "./components/PageHeader.jsx";
-import { toCurrency } from "./utils.js";
+import { formatIsoDateString, toCurrency } from "./utils.js";
 
 export function orderLoader({ params }) {
     return api.get(`orders/${params.id}`).json();
@@ -26,14 +27,15 @@ function ItemRow(props) {
 export function Order() {
     const order = useLoaderData();
 
-    // TODO: dateCreated
-
     return (
         <Box>
             <PageHeader>
                 <PageHeaderText>Order #{order.id}</PageHeaderText>
             </PageHeader>
-            <Box py={2}>
+            <Box pb={2}>
+                <Box mb={2} color={grey[600]}>
+                    Created at: {formatIsoDateString(order.dateCreated)}
+                </Box>
                 <TableContainer component={Paper} variant="outlined">
                     <Table sx={{ '& tbody tr:last-child td': { border: 0 } }}>
                         <TableHead>
