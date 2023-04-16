@@ -14,10 +14,13 @@ import lt.vu.mif.api.contracts.ProductUpdateDto;
 import lt.vu.mif.api.usecases.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 @Path("/products")
 public class ProductsController {
+    private final Logger logger = Logger.getLogger(ProductsController.class.getCanonicalName());
+
     @Inject
     private CreateProduct createProduct;
 
@@ -63,7 +66,9 @@ public class ProductsController {
         try {
             updateProduct.handle(id, dto);
         } catch (OptimisticLockException e) {
+            logger.info("got OptimisticLockException when trying to updated product with id = " + id);
             if (force) {
+                logger.info("forcing update of product with id = " + id);
                 updateProduct.forceUpdate(id, dto);
             } else {
                 return Response.status(409).build();
