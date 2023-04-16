@@ -57,7 +57,7 @@ export function Updates() {
             <PageHeader>
                 <PageHeaderText>Updates</PageHeaderText>
             </PageHeader>
-            <Box py={2}>
+            <Box mt={2}>
                 {data && (
                     <>
                         <UpdateStatus data={data} />
